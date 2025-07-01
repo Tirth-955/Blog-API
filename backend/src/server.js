@@ -4,6 +4,7 @@ import cors from "cors";
 
 import { connectDB } from "./config/db.js";
 import adminRouter from "./routes/admin.routes.js";
+import blogRouter from "./routes/blog.routes.js";
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/admin", adminRouter);
+app.use("/api/blog", blogRouter);
 
 connectDB().then(() => {
     app.listen(PORT, () => {
