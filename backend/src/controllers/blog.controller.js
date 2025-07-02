@@ -10,7 +10,11 @@ export const addBlog = async (req, res) => {
 
         const imageFile = req.file;
 
-        if (!title || !subTitle || !description || !category || !isPublished) {
+        if (!imageFile) {
+            return res.json({ success: false, message: "Image file is required" });
+        }
+
+        if (!title || !subTitle || !description || !category || isPublished === undefined) {
             return res.json({ success: false, message: "Missing Required Fields" });
         }
 
