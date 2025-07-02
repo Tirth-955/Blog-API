@@ -79,6 +79,3 @@ The server will start on the port specified in your `.env` file (default: 3000).
 - All admin routes require a valid JWT token in the `Authorization` header.
 - For blog creation, use `multipart/form-data` with an `image` file and a `blog` field containing a JSON string.
 - Images are uploaded and optimized via ImageKit.
-
-## License
-MIT 
