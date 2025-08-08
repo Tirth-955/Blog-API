@@ -58,7 +58,7 @@ export const addBlog = async (req, res) => {
 
 export const getAllBlogs = async (_, res) => {
     try {
-        const blogs = await Blog.find({ isPublished: true });
+        const blogs = await Blog.find({ isPublished: true }).populate('user', 'name');
 
         res.json({ success: true, blogs });
     } catch (error) {
@@ -70,7 +70,7 @@ export const getBlogById = async (req, res) => {
     try {
         const { blogId } = req.params;
 
-        const blog = await Blog.findById(blogId);
+        const blog = await Blog.findById(blogId).populate('user', 'name');
 
         if (!blog) {
             return res.json({ success: false, message: "Blog Not Found" });

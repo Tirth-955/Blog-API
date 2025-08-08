@@ -2,7 +2,7 @@ import React, { use } from "react";
 import { useNavigate } from "react-router-dom";
 
 const BlogCard = ({ blog }) => {
-  const { title, description, category, image, _id } = blog;
+  const { title, description, category, image, _id, user } = blog;
   const navigate = useNavigate();
 
   return (
@@ -23,6 +23,10 @@ const BlogCard = ({ blog }) => {
           className="mb-3 text-xs text-gray-600"
           dangerouslySetInnerHTML={{ __html: description.slice(0, 80) }}
         ></p>
+        
+        <p className="text-xs text-gray-500">
+          By {user?.name || 'Unknown Author'}
+        </p>
       </div>
     </div>
   );
