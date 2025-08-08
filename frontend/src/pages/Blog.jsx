@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Moment from "moment";
+import ReactMarkdown from "react-markdown";
 
 import { assets, blog_data, comments_data } from "../assets/assets";
 import Navbar from "../components/Navbar";
@@ -30,10 +31,7 @@ const Blog = () => {
 
   const fetchComments = async () => {
     try {
-      console.log("Fetching comments for blog:", id);
       const { data } = await axios.post("/api/blog/comments", { blogId: id });
-
-      console.log("Comments response:", data);
 
       if (data.success) {
         setComments(data.comments);
@@ -54,16 +52,12 @@ const Blog = () => {
       return;
     }
 
-    console.log("Adding comment:", { blog: id, name: name.trim(), content: content.trim() });
-
     try {
       const { data } = await axios.post("/api/blog/addComment", {
         blog: id,
         name: name.trim(),
         content: content.trim()
       });
-
-      console.log("Comment response:", data);
 
       if (data.success) {
         toast.success("Comment added successfully!");
@@ -113,10 +107,29 @@ const Blog = () => {
       <div className="mx-5 max-w-5xl md:mx-auto my-10 mt-6">
         <img src={data.image} className="rounded-3xl mb-5" />
 
-        <div
-          className="rich-text max-w-3xl mx-auto"
-          dangerouslySetInnerHTML={{ __html: data.description }}
-        ></div>
+        <div className="rich-text max-w-3xl mx-auto prose prose-lg max-w-none prose-headings:text-gray-800 prose-p:text-gray-600 prose-strong:text-gray-800 prose-code:bg-gray-100 prose-code:px-1 prose-code:py-0.5 prose-code:rounded">
+          {data.description ? (
+            <ReactMarkdown
+              components={{
+                h1: ({node, ...props}) => <h1 className="text-3xl font-bold mb-4" {...props} />,
+                h2: ({node, ...props}) => <h2 className="text-2xl font-semibold mb-3 mt-6" {...props} />,
+                h3: ({node, ...props}) => <h3 className="text-xl font-semibold mb-2 mt-4" {...props} />,
+                p: ({node, ...props}) => <p className="mb-4 leading-relaxed" {...props} />,
+                ul: ({node, ...props}) => <ul className="list-disc list-inside mb-4 space-y-1" {...props} />,
+                ol: ({node, ...props}) => <ol className="list-decimal list-inside mb-4 space-y-1" {...props} />,
+                li: ({node, ...props}) => <li className="ml-4" {...props} />,
+                strong: ({node, ...props}) => <strong className="font-semibold" {...props} />,
+                em: ({node, ...props}) => <em className="italic" {...props} />,
+                code: ({node, ...props}) => <code className="bg-gray-100 px-1 py-0.5 rounded text-sm font-mono" {...props} />,
+                blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-primary pl-4 italic text-gray-600 my-4" {...props} />,
+              }}
+            >
+              {data.description}
+            </ReactMarkdown>
+          ) : (
+            <p className="text-gray-500 italic">No content available.</p>
+          )}
+        </div>
       </div>
 
       {/* Comment Section */}

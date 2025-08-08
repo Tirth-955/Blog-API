@@ -18,8 +18,7 @@ export const addBlog = async (req, res) => {
             return res.json({ success: false, message: "Missing Required Fields" });
         }
 
-        console.log("imageFile:", imageFile);
-        console.log("req.body.blog:", req.body.blog);
+
 
         const fileBuffer = fs.readFileSync(imageFile.path);
 
