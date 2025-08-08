@@ -12,7 +12,7 @@ const Dashboard = () => {
     recentBlogs: [],
   });
 
-  const { axios } = useAppContext();
+  const { axios, userData, userType } = useAppContext();
 
   const fetchDashboard = async () => {
     try {
@@ -31,13 +31,28 @@ const Dashboard = () => {
 
   return (
     <div className="flex-1 p-4 md:p-10 bg-blue-50/50">
+      {/* Welcome Message */}
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold text-gray-800 mb-2">
+          Welcome back, {userData?.name || 'User'}!
+        </h1>
+        <p className="text-gray-600">
+          {userType === 'admin' 
+            ? "You have access to all blogs and comments across the platform."
+            : "Here's your personal dashboard with your blogs and comments."
+          }
+        </p>
+      </div>
+
       <div className="flex flex-wrap gap-4">
         <div className="flex items-center gap-4 bg-white p-4 min-w-58 rounded shadow cursor-pointer hover:scale-105 transition-all">
           <div>
             <p className="text-xl font-semibold text-gray-600">
               {dashboardData.blogs}
             </p>
-            <p className="text-gray-400 font-light">Blogs</p>
+            <p className="text-gray-400 font-light">
+              {userType === 'admin' ? 'Total Blogs' : 'Your Blogs'}
+            </p>
           </div>
         </div>
 
@@ -46,7 +61,9 @@ const Dashboard = () => {
             <p className="text-xl font-semibold text-gray-600">
               {dashboardData.comments}
             </p>
-            <p className="text-gray-400 font-light">Comments</p>
+            <p className="text-gray-400 font-light">
+              {userType === 'admin' ? 'Total Comments' : 'Comments on Your Blogs'}
+            </p>
           </div>
         </div>
 
@@ -55,14 +72,18 @@ const Dashboard = () => {
             <p className="text-xl font-semibold text-gray-600">
               {dashboardData.drafts}
             </p>
-            <p className="text-gray-400 font-light">Drafts</p>
+            <p className="text-gray-400 font-light">
+              {userType === 'admin' ? 'Total Drafts' : 'Your Drafts'}
+            </p>
           </div>
         </div>
       </div>
 
       <div>
         <div className="flex items-center gap-3 m-4 mt-6 text-gray-600">
-          <p>Latest Blogs</p>
+          <p>
+            {userType === 'admin' ? 'Latest Blogs' : 'Your Latest Blogs'}
+          </p>
         </div>
 
         <div className="relative max-w-4xl overflow-x-auto shadow rounded-lg scrollbar-hide bg-white">
@@ -75,6 +96,11 @@ const Dashboard = () => {
                 <th scope="col" className="px-2 py-4">
                   Blog Title
                 </th>
+                {userType === 'admin' && (
+                  <th scope="col" className="px-2 py-4 max-sm:hidden">
+                    Author
+                  </th>
+                )}
                 <th scope="col" className="px-2 py-4 max-sm:hidden">
                   Date
                 </th>
@@ -95,6 +121,7 @@ const Dashboard = () => {
                     blog={blog}
                     fetchBlogs={fetchDashboard}
                     index={index + 1}
+                    showAuthor={userType === 'admin'}
                   />
                 );
               })}

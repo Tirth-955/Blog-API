@@ -9,12 +9,13 @@ import Dashboard from "./pages/admin/Dashboard";
 import AddBlog from "./pages/admin/AddBlog";
 import ListBlog from "./pages/admin/ListBlog";
 import Comments from "./pages/admin/Comments";
-import Login from "./components/admin/Login";
-import Register from "./components/Register";
+import UnifiedLogin from "./components/UnifiedLogin";
+import Register from "./components/UserRegister";
 import { useAppContext } from "./context/AppContext";
+import AdminRegister from "./components/AdminRegister";
 
 const App = () => {
-  const { token } = useAppContext();
+  const { token, userType } = useAppContext();
 
   return (
     <div>
@@ -22,10 +23,12 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/adminregister" element={<AdminRegister />} />
+        <Route path="/login" element={<UnifiedLogin />} />
         <Route path="/blog/:id" element={<Blog />} />
 
-        <Route path="/admin" element={token ? <Layout /> : <Login />}>
+        {/* Admin routes - accessible to both admin and user roles */}
+        <Route path="/admin" element={token ? <Layout /> : <UnifiedLogin />}>
           <Route index element={<Dashboard />} />
           <Route path="addBlog" element={<AddBlog />} />
           <Route path="listBlog" element={<ListBlog />} />

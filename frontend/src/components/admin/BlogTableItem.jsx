@@ -4,10 +4,10 @@ import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
 import Moment from "moment";
 
-const BlogTableItem = ({ blog, fetchBlogs, index }) => {
+const BlogTableItem = ({ blog, fetchBlogs, index, showAuthor = false }) => {
   const { axios } = useAppContext();
   const [isLoading, setIsLoading] = useState(false);
-  const { title, subTitle, category, createdAt, isPublished, _id } = blog;
+  const { title, subTitle, category, createdAt, isPublished, _id, user } = blog;
   const BlogDate = new Date(createdAt);
 
   const togglePublish = async () => {
@@ -94,6 +94,12 @@ const BlogTableItem = ({ blog, fetchBlogs, index }) => {
           </div>
         </div>
       </td>
+
+      {showAuthor && (
+        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 max-sm:hidden">
+          {user?.name || 'Unknown'}
+        </td>
+      )}
 
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 max-sm:hidden">
         {BlogDate.toLocaleDateString()}

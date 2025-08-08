@@ -4,7 +4,7 @@ import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
 
 const Login = () => {
-  const { axios, setToken } = useAppContext();
+  const { axios, setToken, setUserType } = useAppContext();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,7 +19,8 @@ const Login = () => {
 
       if (data.success) {
         setToken(data.token);
-        localStorage.setItem("token", data.token);
+        setUserType("admin");
+        localStorage.setItem("adminToken", data.token);
         axios.defaults.headers.common["Authorization"] = data.token;
       } else {
         toast.error(data.message);
@@ -76,9 +77,9 @@ const Login = () => {
             </button>
 
             <p className="text-sm text-center mt-4 text-gray-600">
-              Not Registered?{" "}
-              <Link to="/register" className="text-blue-500 hover:underline">
-                Sign Up
+              For user login,{" "}
+              <Link to="/login" className="text-blue-500 hover:underline">
+                click here
               </Link>
             </p>
           </form>

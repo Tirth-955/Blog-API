@@ -7,11 +7,13 @@ import {
     deleteCommentById,
     approveCommentById,
     getDashboard,
+    adminRegister,
 } from "../controllers/admin.controller.js";
 import { auth } from "../middlewares/auth.middleware.js";
 
 const adminRouter = express.Router();
 
+adminRouter.post("/register", adminRegister);
 adminRouter.post("/login", adminLogin);
 adminRouter.get("/comments", auth, getAllCommentsAdmin);
 adminRouter.get("/blogs", auth, getAllBlogsAdmin);

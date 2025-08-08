@@ -14,6 +14,8 @@ export const AppProvider = ({ children }) => {
   const navigate = useNavigate();
 
   const [token, setToken] = useState(null);
+  const [userType, setUserType] = useState(null); // 'admin' or 'user'
+  const [userData, setUserData] = useState(null);
   const [blogs, setBlogs] = useState([]);
   const [input, setInput] = useState("");
 
@@ -28,22 +30,47 @@ export const AppProvider = ({ children }) => {
 
   useEffect(() => {
     fetchBlogs();
-    const token = localStorage.getItem("token");
-    if (token) {
-      setToken(token);
-      axios.defaults.headers.common["Authorization"] = `${token}`;
+    
+    // Check for unified token
+    const storedToken = localStorage.getItem("token");
+    const storedUserType = localStorage.getItem("userType");
+    const storedUserData = localStorage.getItem("userData");
+    
+    if (storedToken && storedUserType) {
+      setToken(storedToken);
+      setUserType(storedUserType);
+      if (storedUserData) {
+        setUserData(JSON.parse(storedUserData));
+      }
+      axios.defaults.headers.common["Authorization"] = storedToken;
     }
   }, []);
+
+  const logout = () => {
+    setToken(null);
+    setUserType(null);
+    setUserData(null);
+    localStorage.removeItem("token");
+    localStorage.removeItem("userType");
+    localStorage.removeItem("userData");
+    delete axios.defaults.headers.common["Authorization"];
+    navigate("/");
+  };
 
   const value = {
     axios,
     navigate,
     token,
     setToken,
+    userType,
+    setUserType,
+    userData,
+    setUserData,
     blogs,
     setBlogs,
     input,
     setInput,
+    logout,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

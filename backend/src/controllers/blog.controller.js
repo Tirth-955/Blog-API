@@ -18,8 +18,6 @@ export const addBlog = async (req, res) => {
             return res.json({ success: false, message: "Missing Required Fields" });
         }
 
-
-
         const fileBuffer = fs.readFileSync(imageFile.path);
 
         // Upload Image to ImageKit
@@ -42,7 +40,7 @@ export const addBlog = async (req, res) => {
         const image = optimizedImageURL;
 
         await Blog.create({
-            title, subTitle, description, category, image, isPublished
+            title, subTitle, description, category, image, isPublished, user: req.userId
         });
 
         res.json({
@@ -88,6 +86,17 @@ export const deleteBlogById = async (req, res) => {
     try {
         const { id } = req.body;
 
+        // Find the blog and check ownership
+        const blog = await Blog.findById(id);
+        if (!blog) {
+            return res.json({ success: false, message: "Blog not found" });
+        }
+
+        // Check if user is admin or owns the blog
+        if (req.userRole !== 'admin' && blog.user.toString() !== req.userId) {
+            return res.json({ success: false, message: "You can only delete your own blogs" });
+        }
+
         await Blog.findByIdAndDelete(id);
 
         // delete all comments associated with the blog
@@ -104,9 +113,16 @@ export const togglePublish = async (req, res) => {
         const { id } = req.body;
 
         const blog = await Blog.findById(id);
+        if (!blog) {
+            return res.json({ success: false, message: "Blog not found" });
+        }
+
+        // Check if user is admin or owns the blog
+        if (req.userRole !== 'admin' && blog.user.toString() !== req.userId) {
+            return res.json({ success: false, message: "You can only modify your own blogs" });
+        }
 
         blog.isPublished = !blog.isPublished;
-
         await blog.save();
 
         res.json({ success: true, message: "Blog Status Updated" });

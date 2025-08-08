@@ -1,8 +1,16 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import SideBar from "../../components/admin/SideBar";
+import { useAppContext } from "../../context/AppContext";
 
 const Layout = () => {
-  const navigate = useNavigate();
+  const { axios, setToken, navigate } = useAppContext();
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    axios.defaults.headers.common["Authorization"] = null;
+    setToken(null);
+    navigate("/");
+  };
 
   return (
     <>
@@ -15,7 +23,7 @@ const Layout = () => {
         </h1>
 
         <button
-          onClick={() => navigate("/admin")}
+          onClick={() => logout()}
           className="flex items-center rounded-full cursor-pointer bg-primary text-white px-10 py-2.5"
         >
           Logout
