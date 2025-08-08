@@ -35,8 +35,7 @@ const ListBlog = () => {
   // Filter blogs based on search term and status
   const filteredBlogs = blogs.filter((blog) => {
     const matchesSearch = blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         blog.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         (blog.user?.name && blog.user.name.toLowerCase().includes(searchTerm.toLowerCase()));
+                         blog.category.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = filterStatus === "all" || 
                          (filterStatus === "published" && blog.isPublished) ||
                          (filterStatus === "draft" && !blog.isPublished);
@@ -84,7 +83,7 @@ const ListBlog = () => {
             <div className="relative">
               <input
                 type="text"
-                placeholder="Search by title, category, or author..."
+                placeholder="Search by title or category..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"

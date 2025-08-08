@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { motion } from "motion/react";
-import { blog_data } from "../assets/assets";
 import BlogCard from "./BlogCard";
 import { useAppContext } from "../context/AppContext";
 
@@ -11,6 +10,7 @@ const BlogList = () => {
     "Startup",
     "Finance",
     "Lifestyle",
+    "Other",
   ];
   const [menu, setMenu] = useState("All");
 
