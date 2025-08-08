@@ -98,7 +98,7 @@ Blog-App-git/
 
    Create `.env` file in the frontend directory:
    ```env
-   VITE_BACKEND_URL=http://localhost:5000
+   VITE_BACKEND_URL=http://localhost:3000
    ```
 
 5. **Start the application**
