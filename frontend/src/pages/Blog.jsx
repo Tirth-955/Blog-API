@@ -6,27 +6,78 @@ import { assets, blog_data, comments_data } from "../assets/assets";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import NotFound from "../components/NotFound";
+import { useAppContext } from "../context/AppContext";
+import toast from "react-hot-toast";
 
 const Blog = () => {
   const { id } = useParams();
 
+  const { axios } = useAppContext();
+
   const [data, setData] = useState(null);
   const [comments, setComments] = useState([]);
-
   const [name, setName] = useState("");
   const [content, setContent] = useState("");
 
   const fetchBlogData = async () => {
-    const data = blog_data.find((item) => item._id === id);
-    setData(data);
+    try {
+      const { data } = await axios.get(`/api/blog/${id}`);
+      data.success ? setData(data.blog) : toast.error(data.message);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to fetch blog");
+    }
   };
 
   const fetchComments = async () => {
-    setComments(comments_data);
+    try {
+      console.log("Fetching comments for blog:", id);
+      const { data } = await axios.post("/api/blog/comments", { blogId: id });
+
+      console.log("Comments response:", data);
+
+      if (data.success) {
+        setComments(data.comments);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error("Fetch comments error:", error);
+      toast.error(error.response?.data?.message || "Failed to fetch comments");
+    }
   };
 
   const addComment = async (e) => {
     e.preventDefault();
+    
+    if (!name.trim() || !content.trim()) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    console.log("Adding comment:", { blog: id, name: name.trim(), content: content.trim() });
+
+    try {
+      const { data } = await axios.post("/api/blog/addComment", {
+        blog: id,
+        name: name.trim(),
+        content: content.trim()
+      });
+
+      console.log("Comment response:", data);
+
+      if (data.success) {
+        toast.success("Comment added successfully!");
+        setName("");
+        setContent("");
+        // Refresh comments
+        fetchComments();
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error("Comment error:", error);
+      toast.error(error.response?.data?.message || "Failed to add comment");
+    }
   };
 
   useEffect(() => {
@@ -98,7 +149,7 @@ const Blog = () => {
           className="flex flex-col items-start gap-4 max-w-lg"
         >
           <input
-            onChange={() => setName(e.target.value)}
+            onChange={(e) => setName(e.target.value)}
             value={name}
             type="text"
             placeholder="Name"
@@ -107,7 +158,7 @@ const Blog = () => {
           />
 
           <textarea
-            onChange={() => setContent(e.target.value)}
+            onChange={(e) => setContent(e.target.value)}
             value={content}
             className="w-full p-2 border border-gray-300 rounded outline-none h-48"
             placeholder="Comment"
@@ -115,7 +166,7 @@ const Blog = () => {
 
           <button
             type="submit"
-            className="bg-primary text-white rounded p-2 px-8 hover:scale-102 transition-all cursor-pointer"
+            className="bg-primary text-white rounded p-2 px-8 hover:scale-105 transition-all cursor-pointer"
           >
             Submit
           </button>

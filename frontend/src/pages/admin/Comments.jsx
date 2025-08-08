@@ -1,13 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { comments_data } from "../../assets/assets";
+import { useAppContext } from "../../context/AppContext";
 import CommentTableItem from "./CommentTableItem";
+import toast from "react-hot-toast";
 
 const Comments = () => {
+  const { axios } = useAppContext();
   const [comments, setComments] = useState([]);
-  const [filter, setFilter] = useState("Not Approved");
 
   const fetchComments = async () => {
-    setComments(comments_data);
+    try {
+      const { data } = await axios.get("/api/admin/comments");
+      
+      if (data.success) {
+        setComments(data.comments);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error("Fetch comments error:", error);
+      toast.error(error.response?.data?.message || "Failed to fetch comments");
+    }
   };
 
   useEffect(() => {
@@ -30,25 +42,21 @@ const Comments = () => {
               <th scope="col" className="px-6 py-3 max-sm:hidden">
                 Date
               </th>
+              <th scope="col" className="px-6 py-3">
+                Actions
+              </th>
             </tr>
           </thead>
 
           <tbody>
-            {comments
-              .filter((comment) => {
-                if (filter === "Approved") {
-                  return comment.isApproved === true;
-                }
-                return comment.isApproved === false;
-              })
-              .map((comment, index) => (
-                <CommentTableItem
-                  key={comment._id}
-                  comment={comment}
-                  index={index + 1}
-                  fetchComments={fetchComments}
-                />
-              ))}
+            {comments.map((comment, index) => (
+              <CommentTableItem
+                key={comment._id}
+                comment={comment}
+                index={index + 1}
+                fetchComments={fetchComments}
+              />
+            ))}
           </tbody>
         </table>
       </div>

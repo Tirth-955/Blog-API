@@ -8,7 +8,8 @@ const Navbar = () => {
   const { navigate, token } = useAppContext();
 
   return (
-    <div className="flex justify-between items-center py-5 mx-8 sm:mx-20 xl:mx-32 cursor-pointer">
+    <div className="sticky top-0 bg-white z-50">
+      <div className="flex justify-between items-center py-5 mx-8 sm:mx-20 xl:mx-32 cursor-pointer ">
       <h1
         onClick={() => navigate("/")}
         className="text-4xl font-bold text-primary"
@@ -22,6 +23,7 @@ const Navbar = () => {
       >
         {token ? "Dashboard" : "Login"}
       </button>
+    </div>
     </div>
   );
 };

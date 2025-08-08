@@ -6,6 +6,10 @@ import { connectDB } from "./config/db.js";
 import adminRouter from "./routes/admin.routes.js";
 import blogRouter from "./routes/blog.routes.js";
 
+// Import models to ensure they are registered
+import "./models/blog.model.js";
+import "./models/comment.model.js";
+
 dotenv.config();
 
 const app = express();
