@@ -29,7 +29,7 @@ services:
         destination: "/index.html"
     envVars:
       # This ensures your frontend knows where to send API requests
-      - key: VITE_API_URL
+      - key: VITE_BACKEND_URL
         fromService:
           type: web
           name: backend
