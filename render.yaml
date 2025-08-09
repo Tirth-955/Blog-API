@@ -1,0 +1,36 @@
+services:
+  # Backend (Node.js Express Server)
+  - type: web
+    name: backend
+    env: node
+    plan: free
+    rootDir: backend
+    buildCommand: "npm install"
+    startCommand: "npm start"
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Add other backend environment variables from your .env file here
+      # Example:
+      # - key: DATABASE_URL
+      #   value: YOUR_DATABASE_URL
+
+  # Frontend (React Vite Static Site)
+  - type: static_site
+    name: frontend
+    plan: free
+    rootDir: frontend
+    buildCommand: "npm install && npm run build"
+    publishDir: "dist"
+    # Rewrite all requests to index.html to support client-side routing
+    routes:
+      - type: rewrite
+        source: "/*"
+        destination: "/index.html"
+    envVars:
+      # This ensures your frontend knows where to send API requests
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: backend
+          property: url
