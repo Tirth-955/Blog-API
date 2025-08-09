@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { blog_data } from "../../assets/assets";
 import BlogTableItem from "../../components/admin/BlogTableItem";
 import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
-import { assets } from "../../assets/assets";
 
 const ListBlog = () => {
   const [blogs, setBlogs] = useState([]);
@@ -121,7 +119,7 @@ const ListBlog = () => {
           </div>
         ) : filteredBlogs.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12">
-            <img src={assets.list_icon} alt="No blogs" className="h-16 w-16 text-gray-300 mb-4" />
+            
             <h3 className="text-lg font-medium text-gray-900 mb-2">No blogs found</h3>
             <p className="text-gray-500 text-center max-w-md">
               {searchTerm || filterStatus !== "all" 

@@ -3,11 +3,12 @@ import { useParams } from "react-router-dom";
 import Moment from "moment";
 import ReactMarkdown from "react-markdown";
 
-import { assets, blog_data, comments_data } from "../assets/assets";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useAppContext } from "../context/AppContext";
 import toast from "react-hot-toast";
+import { assets } from "../assets/assets";
+
 
 const Blog = () => {
   const { id } = useParams();

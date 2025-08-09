@@ -150,6 +150,7 @@ const AddBlog = () => {
             value={description}
             onChange={setDescription}
             height={300}
+            data-color-mode="light"
           />
         </div>
 
