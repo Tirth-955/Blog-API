@@ -2,6 +2,8 @@
 node_modules/
 */node_modules/
 
+readme.txt
+
 # Environment variables
 .env
 .env.local
