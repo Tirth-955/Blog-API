@@ -1,4 +1,4 @@
-# MultiBlog - Unified Blog Platform
+# Blogsmith - Unified Blog Platform
 
 A modern, full-stack blog application with unified authentication system where each user gets their own personalized dashboard.
 
@@ -88,7 +88,7 @@ Blog-App-git/
 
    Create `.env` file in the backend directory:
    ```env
-   PORT=5000
+   PORT=3000
    MONGODB_URI=your_mongodb_connection_string
    JWT_SECRET=your_jwt_secret
    IMAGEKIT_PUBLIC_KEY=your_imagekit_public_key
@@ -206,4 +206,4 @@ For support, please open an issue in the repository or contact the development t
 
 ---
 
-**Built with ❤️ using React, Node.js, and MongoDB**
+**Built with React, Node.js, and MongoDB**

@@ -13,7 +13,7 @@ const Navbar = () => {
           onClick={() => navigate("/")}
           className="text-4xl font-bold text-primary cursor-pointer"
         >
-          MultiBlog
+          Blogsmith
         </h1>
 
         <div className="flex items-center gap-3">

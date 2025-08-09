@@ -19,7 +19,7 @@ const Layout = () => {
           onClick={() => navigate("/")}
           className="text-4xl font-bold text-primary"
         >
-          MultiBlog
+          Blogsmith
         </h1>
 
         <button

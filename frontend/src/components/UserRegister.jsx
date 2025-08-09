@@ -186,13 +186,7 @@ const Register = () => {
                 Sign In
               </Link>
             </p>
-
-            <p className="text-sm text-center mt-4 text-gray-600">
-              Admin Register{" "}
-              <Link to="/adminregister" className="text-blue-500 hover:underline">
-                Admin Register
-              </Link>
-            </p>
+            
           </form>
         </div>
       </div>
