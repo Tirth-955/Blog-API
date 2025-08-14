@@ -28,8 +28,8 @@ This is the backend for the Blog-App, a RESTful API built with Node.js, Express,
 ### Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Tirth-955/Blog-API.git
-   cd Blog-API/backend
+   git clone https://github.com/Tirth-955/Blogsmith.git
+   cd Blogsmith/backend
    ```
 2. Install dependencies:
    ```bash
@@ -70,7 +70,6 @@ The server will start on the port specified in your `.env` file (default: 3000).
 - `POST /api/blog/comments` — Get comments for a blog
 - `GET /api/admin/comments` — Get all comments (admin only)
 - `POST /api/admin/delete-comment` — Delete a comment (admin only)
-- `POST /api/admin/approve-comment` — Approve a comment (admin only)
 
 ### Dashboard (Admin)
 - `GET /api/admin/dashboard` — Get dashboard stats
