@@ -8,7 +8,7 @@ const ListBlog = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
-  const { axios } = useAppContext();
+  const { axios, token } = useAppContext();
 
   const fetchBlogs = async () => {
     try {
@@ -27,8 +27,10 @@ const ListBlog = () => {
   };
 
   useEffect(() => {
-    fetchBlogs();
-  }, []);
+    if (token) {
+      fetchBlogs();
+    }
+  }, [token]);
 
   // Filter blogs based on search term and status
   const filteredBlogs = blogs.filter((blog) => {

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 import { useAppContext } from "../../context/AppContext";
 import toast from "react-hot-toast";
@@ -97,7 +98,7 @@ const BlogTableItem = ({ blog, fetchBlogs, index, showAuthor = false }) => {
 
       {showAuthor && (
         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 max-sm:hidden">
-          {user?.name || 'Unknown'}
+          {user?.name || "Unknown"}
         </td>
       )}
 
@@ -119,6 +120,13 @@ const BlogTableItem = ({ blog, fetchBlogs, index, showAuthor = false }) => {
 
       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
         <div className="flex items-center gap-2">
+          <Link to={`/admin/editBlog/${_id}`}>
+            <button
+              className={`inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md transition-colors text-blue-700 bg-blue-100 hover:bg-blue-200"`}
+            >
+              <span>Edit</span>
+            </button>
+          </Link>
           <button
             onClick={togglePublish}
             disabled={isLoading}

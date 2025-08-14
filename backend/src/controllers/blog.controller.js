@@ -82,6 +82,69 @@ export const getBlogById = async (req, res) => {
     }
 }
 
+export const updateBlogById = async (req, res) => {
+    try {
+        const { blogId } = req.params;
+        const blogData = JSON.parse(req.body.blog);
+        const { title, subTitle, description, category, isPublished } = blogData;
+        const imageFile = req.file;
+
+        // Find the blog and check ownership
+        const blog = await Blog.findById(blogId);
+        if (!blog) {
+            return res.json({ success: false, message: "Blog not found" });
+        }
+
+        // Check if user is admin or owns the blog
+        if (req.userRole !== 'admin' && blog.user.toString() !== req.userId) {
+            return res.json({ success: false, message: "You can only update your own blogs" });
+        }
+
+        // Update fields
+        blog.title = title || blog.title;
+        blog.subTitle = subTitle || blog.subTitle;
+        blog.description = description || blog.description;
+        blog.category = category || blog.category;
+        if (isPublished !== undefined) {
+            blog.isPublished = isPublished;
+        }
+
+        // If there is a new image, upload it and update the URL
+        if (imageFile) {
+            const fileBuffer = fs.readFileSync(imageFile.path);
+
+            // Upload Image to ImageKit
+            const response = await imagekit.upload({
+                file: fileBuffer,
+                fileName: imageFile.originalname,
+                folder: "/blogs"
+            });
+
+            // optimization through imagekit URL transformation
+            const optimizedImageURL = imagekit.url({
+                path: response.filePath,
+                transformation: [
+                    { quality: "auto" },
+                    { format: "webp" },
+                    { width: "1280" },
+                ]
+            });
+
+            blog.image = optimizedImageURL;
+        }
+
+        await blog.save();
+
+        res.json({ success: true, message: "Blog updated successfully" });
+    } catch (error) {
+        console.log(error);
+        res.json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
 export const deleteBlogById = async (req, res) => {
     try {
         const { id } = req.body;

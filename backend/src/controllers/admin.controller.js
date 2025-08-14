@@ -1,49 +1,6 @@
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-import User from "../models/user.model.js";
 import Blog from "../models/blog.model.js";
 import Comment from "../models/comment.model.js";
 
-export const adminRegister = async (req, res) => {
-    try {
-        const { name, email, password } = req.body;
-
-        // Check if user already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.json({ success: false, message: "User already exists with this email" });
-        }
-
-        // Hash password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        // Create new user with admin role
-        const user = await User.create({
-            name,
-            email,
-            password: hashedPassword,
-            role: 'admin'
-        });
-
-        // Generate JWT token
-        const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET);
-
-        res.json({
-            success: true,
-            message: "Admin registered successfully",
-            token,
-            user: {
-                id: user._id,
-                name: user.name,
-                email: user.email,
-                role: user.role
-            }
-        });
-    } catch (error) {
-        res.json({ success: false, message: error.message });
-    }
-};
 
 export const getAllBlogsAdmin = async (req, res) => {
     try {
@@ -93,17 +50,6 @@ export const deleteCommentById = async (req, res) => {
     }
 }
 
-export const approveCommentById = async (req, res) => {
-    try {
-        const { id } = req.body;
-
-        await Comment.findByIdAndUpdate(id, { isApproved: true });
-
-        res.json({ success: true, message: "Comment Approved Successfully" });
-    } catch (error) {
-        res.json({ success: false, message: error.message });
-    }
-}
 
 export const getDashboard = async (req, res) => {
     try {

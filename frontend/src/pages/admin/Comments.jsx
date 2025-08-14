@@ -4,13 +4,13 @@ import CommentTableItem from "./CommentTableItem";
 import toast from "react-hot-toast";
 
 const Comments = () => {
-  const { axios } = useAppContext();
+  const { axios, token } = useAppContext();
   const [comments, setComments] = useState([]);
 
   const fetchComments = async () => {
     try {
       const { data } = await axios.get("/api/admin/comments");
-      
+
       if (data.success) {
         setComments(data.comments);
       } else {
@@ -23,8 +23,10 @@ const Comments = () => {
   };
 
   useEffect(() => {
-    fetchComments();
-  }, []);
+    if (token) {
+      fetchComments();
+    }
+  }, [token]);
 
   return (
     <div className="flex-1 pt-5 sm:pt-12 sm:pl-16 bg-blue-50/50">
